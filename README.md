@@ -1,162 +1,158 @@
-# FinC2E NIM
+# FinC2E NIM — Production-Ready NVIDIA Inference Microservice
 
-**FinC2E (Financial Cognitive Compliance Engine)**  
-Production-ready deployment as an **NVIDIA NIM (Inference Microservice)**  
-within **BPM RED Academy – HumAI MightHub**.
+**FinC2E NIM** is a production-ready NVIDIA Inference Microservice (NIM) designed for
+**governance-first, audit-ready, and deterministic AI inference** in regulated environments
+(finance, compliance, security, defense).
 
-This repository is intentionally **clean, minimal, and deterministic**.
-No weights, no secrets, no ambiguity.
+It is a core building block of:
 
----
-
-## What this repository IS
-
-- NVIDIA **NIM runtime orchestration**
-- Secure **NGC authentication flow**
-- Deterministic **GPU inference deployment**
-- Adapter-ready (Hugging Face / LoRA / safetensors)
-- Designed for **GB200 / Blackwell / NVIDIA-first environments**
+> **BPM RED Academy → MightHub → FinC2E Stack**
 
 ---
 
-## What this repository is NOT
+## What This Repository Is
 
-- ❌ Not a training repository  
-- ❌ Not a dataset repository  
-- ❌ Not a place for secrets or API keys  
-- ❌ Not a monolithic AI stack  
-
-This is **pure inference infrastructure**.
-
----
-
-## Architecture Overview
-
-
-
-GitHub (this repository)
-├─ Runtime orchestration (Docker / Compose)
-├─ Secure NGC login flow
-└─ Deterministic service lifecycle
-
-Hugging Face
-└─ FinC2E adapter (LoRA / safetensors)
-
-NVIDIA NGC
-└─ Base NIM image + optimized inference runtime
-
+- A **clean, deployable NIM wrapper**
+- Adapter-based (LoRA / fine-tuned weights)
+- Ready for **NVIDIA NGC, Brev, DGX, GB200**
+- Docker-native, cloud & on-prem friendly
+- Designed for **future MoE orchestration**
 
 ---
 
-## Requirements
+## High-Level Architecture
 
-- NVIDIA GPU (GB200 / B200 / H100 / A100 compatible)
-- Docker
-- Docker Compose
-- NVIDIA Container Toolkit
-- NVIDIA NGC **Personal API Key**
+BPM RED Academy
+└── MightHub (orchestration layer)
+└── FinC2E NIM (this repo)
+├── Base NVIDIA NIM image
+├── FinC2E Adapter (LoRA / domain logic)
+├── Runtime configs
+└── Governance & observability hooks
+
+This repo represents **one deployable inference unit** inside a larger
+HumAI / MoE ecosystem.
 
 ---
 
 ## Repository Structure
 
-
-
 finc2e-nim/
-├── README.md
+├── adapters/
+│ └── finc2e_adapter/ # 🔒 Local adapter (NOT committed)
+│ └── .gitkeep
+├── configs/ # Optional runtime configs
+├── docs/
+│ ├── QUICKSTART.md
+│ └── TROUBLESHOOTING.md
+├── scripts/ # Helper scripts (login, pull, run)
 ├── docker-compose.yml
 ├── .env.example
 ├── .gitignore
-└── scripts/
-├── login_ngc.sh
-├── pull_nim.sh
-└── up.sh
-
-
----
-
-## Environment Variables
-
-This project uses **local-only environment variables**.
-
-Create a `.env` file (never committed):
-
-
-
-NGC_API_KEY=nvapi-XXXXXXXXXXXXXXXXXXXXXXXX
-NVIDIA_VISIBLE_DEVICES=all
+├── GOVERNANCE.md
+├── CHANGELOG.md
+├── LICENSE
+└── README.md
 
 ---
 
-## Launch Proof (v0.1.0)
-This repository provides a reproducible, governance-first runtime for deploying FinC2E in NVIDIA-accelerated environments.
+## Prerequisites
 
-**Definition of Done**
-- nvcr.io authentication succeeds using an NGC Personal API Key
-- service starts via Docker Compose
-- `/health` returns `200 OK`
-- inference endpoint responds to a test request
-- logs/metrics are available for audit review
-
-> Note: No secrets or proprietary weights are stored in this repo. Adapters are mounted at runtime.
+- NVIDIA GPU (A100 / H100 / GB200 recommended)
+- Docker + NVIDIA Container Runtime
+- NVIDIA NGC account & API key
+- Optional: Brev.dev or DGX Cloud
 
 ---
 
 ## Quick Start
 
+### 1️⃣ Clone repository
+
 ```bash
-git clone <this-repository>
+git clone https://github.com/vuceljedin1-dotcom/finc2e-nim.git
 cd finc2e-nim
 
+2️⃣ Configure environment
 cp .env.example .env
-nano .env          # paste your NGC Personal API Key
 
-chmod +x scripts/*.sh
-./scripts/up.sh
+Edit .env:
+NGC_API_KEY=nvapi-xxxxxxxxxxxxxxxx
+NVIDIA_VISIBLE_DEVICES=all
 
+3️⃣ Login to NVIDIA NGC
+echo "$NGC_API_KEY" | docker login nvcr.io -u '$oauthtoken' --password-stdin
 
-Service will be available on:
-Service will be available on:
+4️⃣ Start FinC2E NIM
+docker compose up -d
 
-Security Model
+5️⃣ Verify health
+docker ps
+curl http://localhost:8000/health
 
-🔐 No secrets stored in repository
+Adapter Model (Important)
 
-🔐 No weights stored in repository
+Adapters are intentionally excluded from Git:
+adapters/finc2e_adapter/
 
-🔐 NGC authentication via $oauthtoken
+You must provide:
 
-🔐 .env explicitly ignored by Git
+adapter_model.safetensors
 
-This repo is safe to be public or private.
+adapter_config.json
 
-Adapter Strategy (Planned)
+Optional domain configs
 
-Adapters are externalized and mounted at runtime:
+This ensures:
 
-Hugging Face for versioned adapters
+IP protection
 
-Deterministic checksum loading
+Clean open-source wrapper
 
-No vendor lock-in
+Private enterprise deployment
 
-Adapters are not part of this repo by design.
+Governance & Compliance
 
-Philosophy
+See:
 
-NVIDIA-first
+GOVERNANCE.md
 
-Inference over training
+CHANGELOG.md
 
-Determinism over convenience
+FinC2E is built for:
 
-Clean repos scale — messy ones collapse
+Audit-ready inference
 
-Ownership
+Deterministic behavior
 
-BPM RED Academy – HumAI MightHub
-FinC2E is part of a broader governance-first, human-centric AI system
-designed for regulated and high-stakes environments.
+Model traceability
 
-© 2025 BPM RED Academy
-All rights reserved.
+Deployment accountability
+
+License
+
+This project is licensed under the BSD 3-Clause License.
+
+You are free to:
+
+Use
+
+Modify
+
+Distribute
+
+Commercialize
+
+With attribution and without endorsement misuse.
+
+Status
+
+Production-ready wrapper
+Validated on NVIDIA ecosystem
+Prepared for NGC & Brev launch
+
+Author
+
+Edin Vučelj
+Founder — BPM RED Academy / MightHub
+Military-grade Human-Centered AI Systems
