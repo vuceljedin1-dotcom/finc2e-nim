@@ -1,1 +1,20 @@
+version: "3.8"
+
+services:
+  finc2e-nim:
+    image: ${NIM_IMAGE:-nvcr.io/nvidia/nim/meta/llama-3.3-70b-instruct:latest}
+    container_name: finc2e-nim
+    ports:
+      - "${NIM_PORT:-8000}:8000"
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}
+      # Adapter discovery (some NIMs use different var names; we’ll align once we confirm your image)
+      - ADAPTER_DIR=/opt/finc2e/adapters/finc2e_adapter
+    volumes:
+      - ${ADAPTER_DIR:-./adapters/finc2e_adapter}:/opt/finc2e/adapters/finc2e_adapter:ro
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: ["gpu"]
 
