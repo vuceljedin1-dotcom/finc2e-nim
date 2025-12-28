@@ -1,1 +1,66 @@
+Business Source License 1.1
+
+License text copyright (c) 2025 Edin Vučelj
+Organization: BPM RED Academy – HumAI MightHub
+Project: FinC2E – Financial Cognitive Compliance Engine (NIM)
+
+-------------------------------------------------------------------------------
+
+Terms
+
+The Licensed Work is provided under the Business Source License 1.1 (the "License").
+
+Licensor:
+Edin Vučelj
+BPM RED Academy – HumAI MightHub
+
+Licensed Work:
+FinC2E – NVIDIA Inference Microservice (NIM)
+Including all source code, adapters, orchestration logic, configurations,
+documentation, and related artifacts in this repository.
+
+Change Date:
+2028-01-01
+
+Change License:
+Apache License, Version 2.0
+
+-------------------------------------------------------------------------------
+
+Usage Grant
+
+You may use, copy, modify, and deploy the Licensed Work for:
+- research
+- evaluation
+- academic use
+- internal non-commercial proof-of-concept
+- NVIDIA NGC / Brev / HuggingFace evaluation
+
+You may NOT:
+- offer the Licensed Work as a paid service
+- embed it into commercial products
+- sublicense or redistribute it commercially
+- deploy it in production environments for third-party commercial use
+
+without explicit written permission from the Licensor.
+
+-------------------------------------------------------------------------------
+
+Additional Use Grant
+
+The Licensor may grant additional permissions, including commercial licenses,
+strategic partnerships, and government or enterprise agreements upon request.
+
+-------------------------------------------------------------------------------
+
+Disclaimer
+
+The Licensed Work is provided "AS IS", without warranty of any kind,
+express or implied, including but not limited to fitness for a particular purpose,
+security, compliance, or regulatory approval.
+
+-------------------------------------------------------------------------------
+
+This license is based on the Business Source License 1.1.
+Full text: https://mariadb.com/bsl11/
 
