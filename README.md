@@ -86,6 +86,19 @@ Create a `.env` file (never committed):
 NGC_API_KEY=nvapi-XXXXXXXXXXXXXXXXXXXXXXXX
 NVIDIA_VISIBLE_DEVICES=all
 
+---
+
+## Launch Proof (v0.1.0)
+This repository provides a reproducible, governance-first runtime for deploying FinC2E in NVIDIA-accelerated environments.
+
+**Definition of Done**
+- nvcr.io authentication succeeds using an NGC Personal API Key
+- service starts via Docker Compose
+- `/health` returns `200 OK`
+- inference endpoint responds to a test request
+- logs/metrics are available for audit review
+
+> Note: No secrets or proprietary weights are stored in this repo. Adapters are mounted at runtime.
 
 ---
 
