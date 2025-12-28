@@ -1,17 +1,8 @@
-# FinC2E NIM – Quickstart
+# Quickstart (FinC2E NIM)
 
-## 1) Create .env
-Copy `.env.example` to `.env` and set:
-- `NGC_API_KEY` (Personal NGC API key starting with `nvapi-`)
-
-## 2) Start
+## 1) Clone & env
 ```bash
-chmod +x scripts/*.sh
-./scripts/up.sh
-
-## 3) Verify
-./scripts/healthcheck.sh
-docker logs --tail=100 finc2e-nim
-
-4) Stop
-./scripts/down.sh
+git clone <your-repo-url>
+cd finc2e-nim
+cp .env.example .env
+nano .env
