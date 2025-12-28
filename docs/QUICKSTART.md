@@ -12,3 +12,6 @@ chmod +x scripts/*.sh
 ## 3) Verify
 ./scripts/healthcheck.sh
 docker logs --tail=100 finc2e-nim
+
+4) Stop
+./scripts/down.sh
