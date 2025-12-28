@@ -1,15 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [ -f ".env" ]; then
-  set -a
-  source .env
-  set +a
-fi
+bash scripts/pull_nim.sh
 
-./scripts/login_ngc.sh
-./scripts/pull_image.sh
-
+echo "Starting service..."
 docker compose up -d
-docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
 
+echo "Containers:"
+docker ps
+
+echo "Tip: check logs with: docker logs -f finc2e-nim"
