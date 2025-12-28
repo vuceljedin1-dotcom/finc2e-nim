@@ -6,29 +6,28 @@ services:
     container_name: finc2e-nim
     restart: unless-stopped
 
-    # GPU
-    runtime: nvidia
-    environment:
-      - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}
-
-    # Ports (prilagodi ako tvoj NIM sluša na drugom portu)
     ports:
       - "8000:8000"
 
-    # Volumes
-    volumes:
-      # Local adapter mount (kept out of git)
-      - ./adapters/finc2e_adapter:/opt/finc2e/adapter:ro
-      # Optional runtime config examples
-      - ./configs:/opt/finc2e/configs:ro
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}
 
-    # Healthcheck
+    # Better GPU attachment than runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+
+    volumes:
+      - ./adapters/finc2e_adapter:/opt/finc2e/adapter:ro
+
+    # Healthcheck via HTTP (najčešći pattern)
     healthcheck:
-      test: ["CMD-SHELL", "/bin/bash -lc '/opt/finc2e/healthcheck.sh || exit 1'"]
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8000/health || curl -fsS http://localhost:8000/v1/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 10
       start_period: 40s
 
-    # Optional: if your environment needs shared memory bump
     shm_size: "2gb"
