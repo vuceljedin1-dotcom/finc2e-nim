@@ -1,0 +1,28 @@
+finc2e-nim/
+├─ README.md                               (ti već imaš)
+├─ LICENSE                                 (opcionalno)
+├─ .gitignore                              [COPY-PASTE]
+├─ .env.example                            [COPY-PASTE]
+├─ docker-compose.yml                      [COPY-PASTE]
+├─ Makefile                                (opcionalno) [COPY-PASTE]
+│
+├─ scripts/
+│  ├─ login_ngc.sh                         [COPY-PASTE]
+│  ├─ pull_image.sh                        [COPY-PASTE]
+│  ├─ up.sh                                [COPY-PASTE]
+│  ├─ down.sh                              [COPY-PASTE]
+│  └─ healthcheck.sh                       [COPY-PASTE]
+│
+├─ configs/
+│  ├─ nim.env.example                      [COPY-PASTE]
+│  └─ finc2e.runtime.env.example           (opcionalno) [COPY-PASTE]
+│
+├─ adapters/
+│  └─ finc2e_adapter/
+│     ├─ adapter_config.json               [UPLOAD LOCAL ✅]
+│     ├─ adapter_model.safetensors         [UPLOAD LOCAL ✅]
+│     └─ config.json                       [UPLOAD LOCAL ✅]
+│
+└─ docs/
+   ├─ QUICKSTART.md                         [COPY-PASTE]
+   └─ TROUBLESHOOTING.md                    [COPY-PASTE]
