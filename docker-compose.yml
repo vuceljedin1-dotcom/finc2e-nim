@@ -2,19 +2,33 @@ version: "3.8"
 
 services:
   finc2e-nim:
-    image: ${NIM_IMAGE:-nvcr.io/nvidia/nim/meta/llama-3.3-70b-instruct:latest}
+    image: nvcr.io/nvidia/nim/meta/llama-3.3-70b-instruct:latest
     container_name: finc2e-nim
-    ports:
-      - "${NIM_PORT:-8000}:8000"
+    restart: unless-stopped
+
+    # GPU
+    runtime: nvidia
     environment:
       - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}
-      # Adapter discovery (some NIMs use different var names; we’ll align once we confirm your image)
-      - ADAPTER_DIR=/opt/finc2e/adapters/finc2e_adapter
-    volumes:
-      - ${ADAPTER_DIR:-./adapters/finc2e_adapter}:/opt/finc2e/adapters/finc2e_adapter:ro
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - capabilities: ["gpu"]
 
+    # Ports (prilagodi ako tvoj NIM sluša na drugom portu)
+    ports:
+      - "8000:8000"
+
+    # Volumes
+    volumes:
+      # Local adapter mount (kept out of git)
+      - ./adapters/finc2e_adapter:/opt/finc2e/adapter:ro
+      # Optional runtime config examples
+      - ./configs:/opt/finc2e/configs:ro
+
+    # Healthcheck
+    healthcheck:
+      test: ["CMD-SHELL", "/bin/bash -lc '/opt/finc2e/healthcheck.sh || exit 1'"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 40s
+
+    # Optional: if your environment needs shared memory bump
+    shm_size: "2gb"
