@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PORT="${NIM_PORT:-8000}"
-echo "Checking http://localhost:${PORT}/health ..."
-curl -sS "http://localhost:${PORT}/health" || true
-echo
-
+# Basic check (adjust endpoint to match your NIM)
+# If NIM exposes /v1/models or /health, use that.
+curl -fsS http://localhost:8000/health >/dev/null 2>&1 || exit 1
+echo "ok"
