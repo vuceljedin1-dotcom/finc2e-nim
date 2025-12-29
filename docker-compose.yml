@@ -1,27 +1,26 @@
-version: "3.8"
-
 services:
   finc2e-nim:
-    image: nvcr.io/nim/meta/llama-3.3-70b-instruct:latest
+    image: nvcr.io/nvidia/nim/llm/llama-3.1-70b-instruct:latest
     container_name: finc2e-nim
     restart: unless-stopped
 
-    # Brev secure link port will be 8001 (host) -> 8000 (container)
     ports:
-      - "8001:8000"
+      - "8000:8000"
 
-    # Adapter is NOT stored in the repo.
-    # You will upload it to the instance after deploy.
+    environment:
+      NVIDIA_VISIBLE_DEVICES: all
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+
     volumes:
       - ./adapters/finc2e_adapter:/opt/finc2e/adapter:ro
 
-    # optional: expose all GPUs
-    environment:
-      - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}
-
-    # simple healthcheck; helps Brev mark secure link healthy
     healthcheck:
-      test: ["CMD-SHELL", "curl -fsS http://localhost:8000/health || curl -fsS http://localhost:8000/v1/health || exit 1"]
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8000/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 10
