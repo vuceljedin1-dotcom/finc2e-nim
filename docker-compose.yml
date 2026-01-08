@@ -1,8 +1,6 @@
-version: "3.8"
-
 services:
   finc2e-nim:
-    image: nvcr.io/nvidia/nim/llm/llama-3.1-70b-instruct:latest
+    image: nvcr.io/nvidia/nim/llm/llama-3.3-70b-instruct:latest
     container_name: finc2e-nim
     restart: unless-stopped
 
@@ -10,26 +8,20 @@ services:
       - "8000:8000"
 
     environment:
-      NVIDIA_VISIBLE_DEVICES: all
+      - NGC_API_KEY=${NGC_API_KEY}
+      - NVIDIA_VISIBLE_DEVICES=all
 
     deploy:
       resources:
         reservations:
           devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-
-    # Privremeno isključi adapter mount dok ne potvrdiš da servis diže 8000.
-    # Kad proradi, vraćamo mount sa tačnim apsolutnim putem.
-    # volumes:
-    #   - /ABSOLUTE/PATH/adapters/finc2e_adapter:/opt/finc2e/adapter:ro
-
-    shm_size: "8gb"
+            - capabilities: [gpu]
 
     healthcheck:
-      test: ["CMD-SHELL", "curl -fsS http://localhost:8000/ || exit 1"]
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8000/health || exit 1"]
       interval: 30s
       timeout: 10s
-      retries: 20
-      start_period: 240s
+      retries: 10
+      start_period: 120s
+
+    shm_size: "16gb"
