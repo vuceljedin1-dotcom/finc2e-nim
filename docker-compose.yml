@@ -5,22 +5,13 @@ services:
     image: nvcr.io/nvidia/nim/llm/llama-3.1-70b-instruct:latest
     container_name: finc2e-nim
     restart: unless-stopped
-
     ports:
       - "8000:8000"
-
     environment:
-      - NVIDIA_VISIBLE_DEVICES=all
-      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
-      # Optional (only if your org/account requires it):
-      # - NGC_API_KEY=${NGC_API_KEY}
-
-    # Mount your private adapter (safe even if empty; but best if files exist)
+      NVIDIA_VISIBLE_DEVICES: "all"
+      NVIDIA_DRIVER_CAPABILITIES: "compute,utility"
     volumes:
       - ./adapters/finc2e_adapter:/opt/finc2e/adapter:ro
-
-    # NOTE: Health endpoint varies by NIM image; this is the common one.
-    # If it doesn't exist, the container can still run—just adjust later.
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://localhost:8000/health || exit 1"]
       interval: 30s
@@ -28,48 +19,31 @@ services:
       retries: 20
       start_period: 180s
 
-    # GPU reservation for compose v2 environments
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-
   jupyter:
     image: jupyter/minimal-notebook:latest
     container_name: finc2e-jupyter
     restart: unless-stopped
     depends_on:
       - finc2e-nim
-
     ports:
       - "8888:8888"
-
     environment:
-      # Change this token any time (or set in Brev env vars)
-      - JUPYTER_TOKEN=${JUPYTER_TOKEN:-bpmred}
-      - JUPYTER_ENABLE_LAB=yes
-
+      JUPYTER_ENABLE_LAB: "yes"
+      JUPYTER_TOKEN: "bpmred"
     volumes:
       - ./:/home/jovyan/work
       - ./adapters/finc2e_adapter:/home/jovyan/work/adapters/finc2e_adapter:ro
-
-    command: >
-      bash -lc
-      "start-notebook.py
-      --ServerApp.token=${JUPYTER_TOKEN:-bpmred}
-      --ServerApp.password=''
-      --ServerApp.allow_remote_access=True
-      --ServerApp.allow_origin='*'
-      --ServerApp.disable_check_xsrf=True
-      --ServerApp.root_dir=/home/jovyan/work"
-
+    command:
+      - "start-notebook.py"
+      - "--ServerApp.token=bpmred"
+      - "--ServerApp.password="
+      - "--ServerApp.allow_remote_access=True"
+      - "--ServerApp.allow_origin=*"
+      - "--ServerApp.disable_check_xsrf=True"
+      - "--ServerApp.root_dir=/home/jovyan/work"
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://localhost:8888/api || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 20
       start_period: 60s
-```0
