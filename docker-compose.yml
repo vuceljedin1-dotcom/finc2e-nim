@@ -1,5 +1,7 @@
 services:
   finc2e-nim:
+    # UMJESTO :latest koristi digest:
+    # image: nvcr.io/nvidia/nim/llm/llama-3.1-70b-instruct@sha256:PASTE_DIGEST_HERE
     image: nvcr.io/nvidia/nim/llm/llama-3.1-70b-instruct:latest
     container_name: finc2e-nim
     restart: unless-stopped
@@ -15,7 +17,8 @@ services:
       - ./adapters/finc2e_adapter:/opt/finc2e/adapter:ro
 
     healthcheck:
-      test: ["CMD-SHELL", "curl -fsS http://localhost:8000/health || exit 1"]
+      # bitno: curl mora postojati u image-u; ako ne postoji, healthcheck će failati iako je servis OK
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8000/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 10
